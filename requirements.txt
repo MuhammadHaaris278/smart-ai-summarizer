@@ -1,6 +1,12 @@
 streamlit
-openai-whisper
-sumy
-python-docx
 streamlit-mic-recorder
+openai-whisper
+torch
+numpy
+tqdm
 ffmpeg-python
+pydub  
+sumy
+scipy
+python-docx
+transformers
