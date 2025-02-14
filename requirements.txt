@@ -1,0 +1,6 @@
+streamlit
+torch
+openai-whisper
+sumy
+python-docx
+streamlit-mic-recorder
