@@ -2,11 +2,9 @@ import streamlit as st
 import whisper
 import os
 import tempfile
-from sumy.parsers.plaintext import PlaintextParser
-from sumy.nlp.tokenizers import Tokenizer
-from sumy.summarizers.lsa import LsaSummarizer
 from docx import Document
 from streamlit_mic_recorder import mic_recorder
+from transformers import pipeline
 
 # Set Page Config
 st.set_page_config(page_title="AI Summarizer", layout="wide")
@@ -69,17 +67,20 @@ st.write("This AI-powered summarization tool allows you to quickly generate conc
 # Load Whisper Model
 whisper_model = whisper.load_model("base")
 
+# Load Hugging Face Summarizer Model
+summarizer = pipeline("summarization", model="t5-small")
+
 # Summarization Function
 def summarize_text(text, length):
     if not text.strip():
         return "No valid text to summarize."
     
+    # Define token limit based on summary length
+    max_length = {"Short": 50, "Medium": 100, "Long": 150}[length]
+    
     try:
-        parser = PlaintextParser.from_string(text, Tokenizer("english"))
-        summarizer = LsaSummarizer()
-        num_sentences = {"Short": 2, "Medium": 4, "Long": 6}[length]
-        summary = summarizer(parser.document, num_sentences)
-        return " ".join([str(sentence) for sentence in summary])
+        summary = summarizer(text, max_length=max_length, min_length=25, do_sample=False)
+        return summary[0]["summary_text"]
     except Exception as e:
         return f"Error in summarization: {str(e)}"
 
@@ -178,10 +179,6 @@ with tab3:
                 st.download_button("📥 Download Summary", summarized_text, file_name="speech_summary.txt")
         except Exception as e:
             st.error(f"Error in transcription: {str(e)}")
-
-    # Cleanup Temporary Files
-    if audio_file_path and os.path.exists(audio_file_path):
-        os.remove(audio_file_path)
 
 # Footer
 st.markdown("<div class='footer'>Created by Haaris</div>", unsafe_allow_html=True)
