@@ -38,11 +38,17 @@ streamlit run app.py
 ## **Requirements** (`requirements.txt`)  
 ```
 streamlit
-whisper
-torch
-sumy
-python-docx
 streamlit-mic-recorder
+openai-whisper
+torch
+numpy
+tqdm
+ffmpeg-python
+pydub  
+sumy
+scipy
+python-docx
+transformers
 ```
 
 ## **Usage**  
