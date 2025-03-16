@@ -10,3 +10,4 @@ sumy
 scipy
 python-docx
 transformers
+coqui-tts
